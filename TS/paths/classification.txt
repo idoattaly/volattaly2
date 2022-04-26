@@ -1,0 +1,8 @@
+rules: >-
+       [ "/sample/**" ], # Tieqiang-dc-heacth 
+       [ "/file/upload" ], # Tieqiang-dc-heacth
+       [ "/some/rubbish/path" ],
+       [ "/things/**" ], # test-repo
+       [ "/user/password/**" ], # europeana-api2
+       [ "/group/**" ], # dc-heacth
+

@@ -1,0 +1,5 @@
+rules: >-
+       [ "/data/**" ], # Tieqiang-dc-heacth 
+       [ "/file/upload" ], # Tieqiang-dc-heacth
+       [ "/some/rubbish/path" ],
+       [ "/foo/**" ], # test-repo

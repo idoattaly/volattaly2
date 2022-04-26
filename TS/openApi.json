@@ -1,0 +1,5423 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Vim API",
+    "version": "1.1",
+    "description": "Vim platform was built to help payers and providers succeed in a value-based world. \n \n The Vim API is designed to provide you with all that you need to enable provider search and booking from your website or mobile app. \n \nVim's API is organized around the [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) methodology. It uses resource-oriented URLs, and common HTTP response codes to indicate API errors. \n\nAll requests are authenticated using an `x-api-key` header which is provided by Vim, alongside an `authorization` header. Certain requests may require a secret that will be provided by Vim. These endpoints will be marked with a `Backend` mark. Make sure that this secret is not exposed to a third party.",
+    "x-logo": {
+      "url": "https://js.getvim.com/web/v1.1/images/vim.png"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api-sandbox.getvim.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "Provider",
+      "description": "The Provider data model enables you to search for providers by various criteria and provides relevant information about providers, including information to support a booking process."
+    },
+    {
+      "name": "Patient",
+      "description": "The Patient data model is intended to provide the relevant information about the patient, to support the booking experience"
+    },
+    {
+      "name": "Appointment",
+      "description": "The Appointment data model is used to send appointment or appointment requests to the provider's office."
+    }
+  ],
+  "paths": {
+    "/provider/{npi}/bookingData": {
+      "post": {
+        "tags": ["Provider"],
+        "description": "For a specific provider, returns extended provider information, appointment types and available time slots for a given date range. Also returns the scheduling configuration of the chosen provider and API key.",
+        "operationId": "getBookingData",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "npi",
+            "description": "NPI of the chosen provider.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/getBookingDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getBookingDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Provider/Address not found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/provider/{npi}/bookingData",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "400": {
+              "statusCode": "400",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "404": {
+              "statusCode": "404",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "502",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "requestParameters": {
+            "integration.request.path.npi": "method.request.path.npi",
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      }
+    },
+    "/provider/freeText": {
+      "post": {
+        "description": "The free-text endpoint returns supported search terms for any free text input. It can be used, for example, to power a typeahead and/or autocomplete component. It also supports typos and colloquial names for providers. For instance, for the search term \"heart\", this endpoint may return the following search terms: \"heart surgeon\", \"heart attack\", \"John Hart, MD\", \"Heart and Vascular Institute\".",
+        "tags": ["Provider"],
+        "operationId": "freeText",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FreeTextRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "CORS header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/autocompleteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/provider/freeText",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/provider": {
+      "post": {
+        "description": "The \"find\" endpoint returns a ranked list of providers based on the requested search criteria. The search criteria may include search terms (conditions, procedures, specialties, etc.), filters, location and other patient attributes that may affect the ranking, such as patient insurance.",
+        "tags": ["Provider"],
+        "operationId": "find",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindProviderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "CORS header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/findProvidersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/provider",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/provider/{npi}": {
+      "get": {
+        "description": "Fetch the full provider profile by NPI",
+        "operationId": "getByNpi",
+        "tags": ["Provider"],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "npi",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "memberToken",
+            "in": "query",
+            "description": "Member token obtained from the identifyPatient endpoint. Providing this parameter can improve provider booking availability.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "CORS header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/providerProfile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "404": {
+            "description": "Provider not found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/provider/{npi}",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401"
+            },
+            "404": {
+              "statusCode": "404"
+            },
+            "500": {
+              "statusCode": "500"
+            },
+            "502": {
+              "statusCode": "502"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization",
+            "integration.request.path.npi": "method.request.path.npi"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/auth/getJwt": {
+      "get": {
+        "tags": ["Authentication"],
+        "description": "Authenticates the API key and initializes the API session.",
+        "operationId": "getJwt",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "example": "108469b2-3191-4d0c-8c89-b176ed50f7f6",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-secret",
+            "in": "header",
+            "description": "Secret provided by Vim for authentication.",
+            "required": false,
+            "example": "7kdsJV854gaq",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "CORS header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/auth/getJwt",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        }
+      }
+    },
+    "/appointment/request": {
+      "post": {
+        "tags": ["Appointment"],
+        "description": "Sends a booking request to the provider's office",
+        "operationId": "requestToBook",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppointmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentRequestResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/appointment/request",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "400": {
+              "statusCode": "400",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401"
+            },
+            "403": {
+              "statusCode": "403"
+            },
+            "404": {
+              "statusCode": "404"
+            },
+            "500": {
+              "statusCode": "500"
+            },
+            "502": {
+              "statusCode": "502"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      }
+    },
+    "/provider/alternatives": {
+      "get": {
+        "tags": ["Provider"],
+        "description": "For a list of providers, returns the booking method, appointment types and next available slot.",
+        "operationId": "getProviderAlternatives",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "description": "provider address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "npi",
+            "in": "query",
+            "description": "provider's NPI",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "plan",
+            "in": "query",
+            "description": "member's plan",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "description": "appointment type's medical code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nextAvailableSlot",
+            "in": "query",
+            "description": "original provider's next available appointment",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberLanguage",
+            "in": "query",
+            "description": "the language of the member (es / en /...)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/providerAlternativesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Provider/Address not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/provider/alternatives",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "404": {
+              "statusCode": "404",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "502",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization",
+            "integration.request.querystring.npi": "method.request.querystring.npi",
+            "integration.request.querystring.address": "method.request.querystring.address",
+            "integration.request.querystring.plan": "method.request.querystring.plan",
+            "integration.request.querystring.code": "method.request.querystring.code",
+            "integration.request.querystring.nextAvailableSlot": "method.request.querystring.nextAvailableSlot"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
+      }
+    },
+    "/provider/availability": {
+      "post": {
+        "tags": ["Provider"],
+        "description": "For a list of providers, returns the booking method and appointment types.",
+        "operationId": "getProviderAvailability",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/providerAvailabilityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/providersAvailabilityResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Provider/Address not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/provider/availability",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "400": {
+              "statusCode": "400",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "404": {
+              "statusCode": "404",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "502",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      }
+    },
+    "/appointment/book": {
+      "post": {
+        "tags": ["Appointment"],
+        "description": "Books an appointment for a patient at the provider's office",
+        "operationId": "bookAppointment",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "404": {
+            "description": "Provider/Address not found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "409": {
+            "description": "Time slot conflict",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/appointment/book",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "400": {
+              "statusCode": "400",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "405": {
+              "statusCode": "405",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "409": {
+              "statusCode": "409",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "502",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      }
+    },
+    "/appointment/{id}": {
+      "get": {
+        "tags": ["Appointment"],
+        "description": "Returns an appointment by id",
+        "operationId": "getAppointment",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The id of the appointment.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "a7aef58a-4dfc-48fe-aeeb-a79744f779eb"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/appointment/{id}",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "502",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http",
+          "requestParameters": {
+            "integration.request.path.id": "method.request.path.id",
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          }
+        }
+      }
+    },
+    "/patient/appointments": {
+      "post": {
+        "tags": ["Patient"],
+        "description": "Returns all of the patient's appointments that were booked through Vim",
+        "operationId": "getPatientAppointments",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/getPatientAppointmentsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getPatientAppointmentsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "authorizationHeader": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/patient/appointments",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "502",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http",
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          }
+        }
+      }
+    },
+    "/appointment/cancel": {
+      "post": {
+        "tags": ["Appointment"],
+        "description": "Cancel an appointment or an appointment request",
+        "operationId": "cancelAppointment",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelAppointmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/appointment/cancel",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "400": {
+              "statusCode": "400",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "502": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http",
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          }
+        }
+      }
+    },
+    "/appointment/reschedule": {
+      "post": {
+        "tags": ["Appointment"],
+        "description": "Reschedule an appointment",
+        "operationId": "rescheduleAppointment",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RescheduleAppointmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          },
+          "502": {
+            "description": "Server error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/appointment/reschedule",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "500": {
+              "statusCode": "500",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http",
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          }
+        }
+      }
+    },
+    "/auth/refreshJwt": {
+      "post": {
+        "tags": ["Authentication"],
+        "description": "Refreshes the API session.",
+        "operationId": "refreshJwt",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API key provided by Vim for authentication.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "CORS header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/auth/refreshJwt",
+          "responses": {
+            "200": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            },
+            "401": {
+              "statusCode": "401",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      }
+    },
+    "/patient/identify": {
+      "post": {
+        "tags": ["Patient"],
+        "operationId": "identify",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "description": "API key provided by Vim for authentication.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-insurer",
+            "in": "header",
+            "description": "insurer of the patient",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Bearer authorization token obtained from /auth/getJwt endpoint.",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdentifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/identifyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Server error",
+            "content": {}
+          },
+          "502": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Server error",
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-request-validator": "Validate body, query string parameters, and headers",
+        "x-amazon-apigateway-integration": {
+          "uri": "https://${stageVariables.baseUrl}/api/v1/sdk/patient/identify",
+          "responses": {
+            "200": {
+              "statusCode": "200"
+            },
+            "400": {
+              "statusCode": "400"
+            },
+            "401": {
+              "statusCode": "401"
+            },
+            "403": {
+              "statusCode": "403"
+            },
+            "500": {
+              "statusCode": "500"
+            },
+            "502": {
+              "statusCode": "502"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.header.x-insurer": "method.request.header.x-insurer",
+            "integration.request.header.Authorization": "method.request.header.Authorization"
+          },
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Gender": {
+        "type": "string",
+        "enum": ["MALE", "FEMALE","UNSPECIFIED"],
+        "example": "MALE",
+        "description": "The member's gender"
+      },
+      "RelationshipToPrimaryMember": {
+        "type": "string",
+        "enum": ["SELF", "SPOUSE", "DEPENDENT", "LIFE_PARTNER", "CHILD"],
+        "example": "DEPENDENT",
+        "description": "member relation to the insurance owner"
+      },
+      "Address": {
+        "type": "object",
+        "required": [
+          "addressLine1",
+          "city",
+          "state",
+          "zip"
+        ],
+        "properties": {
+          "addressLine1": {
+            "type": "string",
+            "description": "The member's address line 1",
+            "example": "123 Pine St"
+          },
+          "addressLine2": {
+            "type": "string",
+            "description": "The member's address line 2",
+            "example": "123 Pine St"
+          },
+          "city": {
+            "type": "string",
+            "description": "The member's city",
+            "example": "Seattle"
+          },
+          "state": {
+            "type": "string",
+            "description": "The member's state",
+            "example": "WA"
+          },
+          "zip": {
+            "type": "string",
+            "description": "The member's zip. Must be 5 or 9 digits",
+            "example": "11111"
+          }
+        }
+      },
+      "successResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RefreshRequest": {
+        "type": "object",
+        "required": ["refresh_token"],
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "description": "Refresh token provided in a call to /auth/getJwt",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          }
+        }
+      },
+      "AppointmentReview": {
+        "type": "object",
+        "required": ["appointmentId", "rating"],
+        "properties": {
+          "appointmentId": {
+            "type": "number"
+          },
+          "rating": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "ActionAnalytics": {
+        "type": "object",
+        "required": [
+          "queryId",
+          "memberSessionId",
+          "actionType",
+          "npi",
+          "locationId",
+          "ranking",
+          "entityId"
+        ],
+        "properties": {
+          "queryId": {
+            "type": "string"
+          },
+          "memberSessionId": {
+            "type": "string"
+          },
+          "actionType": {
+            "type": "string"
+          },
+          "npi": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "number"
+          },
+          "ranking": {
+            "type": "number"
+          },
+          "entityId": {
+            "type": "string"
+          }
+        }
+      },
+      "VerifyTokenRequest": {
+        "type": "object",
+        "properties": {
+          "memberToken": {
+            "type": "string"
+          },
+          "requestToken": {
+            "type": "string"
+          }
+        }
+      },
+      "CancelAppointmentRequest": {
+        "type": "object",
+        "required": ["appointmentId"],
+        "properties": {
+          "appointmentId": {
+            "type": "string",
+            "description": "Appointment id",
+            "example": "a7aef58a-4dfc-48fe-aeeb-a79744f779eb"
+          },
+          "memberLanguage": {
+            "type": "string",
+            "description": "member locale/language",
+            "example": "EN"
+          }
+        }
+      },
+      "RescheduleAppointmentRequest": {
+        "type": "object",
+        "required": ["appointmentId"],
+        "properties": {
+          "appointmentId": {
+            "type": "string",
+            "description": "Appointment id",
+            "example": "a7aef58a-4dfc-48fe-aeeb-a79744f779eb"
+          },
+          "newStartDateTime": {
+            "type": "string",
+            "description": "New start date time",
+            "example": "2019-03-04T10:00:00.000Z"
+          },
+          "memberLanguage": {
+            "type": "string",
+            "description": "member locale/language",
+            "example": "EN"
+          }
+        }
+      },
+      "AppointmentRequestResponse": {
+        "type": "object",
+        "required": ["appointmentRequestId"],
+        "properties": {
+          "appointmentRequestId": {
+            "type": "string",
+            "description": "Unique identifier for the submitted request",
+            "example": "6b57e0ba-942b-4ef8-a79c-036e22f20066"
+          }
+        }
+      },
+      "ConciergeResponse": {
+        "type": "object",
+        "required": ["appointmentId"],
+        "properties": {
+          "appointmentId": {
+            "type": "number",
+            "description": "Vim's internal identifier for the submitted appointment",
+            "example": 255
+          }
+        }
+      },
+      "Appointment": {
+        "type": "object",
+        "required": [
+          "address",
+          "timezone",
+          "appointmentTypeId",
+          "startTime",
+          "endTime",
+          "npi",
+          "status"
+        ],
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "provider's NPI",
+            "example": "1396709168"
+          },
+          "address": {
+            "type": "string",
+            "description": "provider's address",
+            "example": "4100 Lake Otis Parkway Suite 322 322, Anchorage, AK"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Provider's office timezone",
+            "example": "America/New_York"
+          },
+          "appointmentTypeId": {
+            "type": "string",
+            "description": "chosen appointment type ID, must be one of the values returned in a provider/getBookingData response.",
+            "example": "44234"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "the start time of the appointment",
+            "example": "2019-03-04T10:00:00.000Z"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "the end time of the appointment",
+            "example": "2019-03-04T10:15:00.000Z"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACCEPTED", "PENDING", "CANCELED", "ARCHIVED"]
+          },
+          "cancellation": {
+            "required": ["cancellationType"],
+            "type": "object",
+            "properties": {
+              "cancellationType": {
+                "type": "string",
+                "enum": ["API", "PHONE"]
+              },
+              "cancellationPhone": {
+                "type": "string",
+                "example": null
+              }
+            }
+          }
+        }
+      },
+      "providerAlternativesResponse": {
+        "type": "object",
+        "required": ["providers"],
+        "properties": {
+          "providers": {
+            "type": "object",
+            "description": "list of providers and their availability",
+            "properties": {
+              "npi": {
+                "type": "string",
+                "description": "provider's NPI",
+                "example": "1396709168"
+              },
+              "address": {
+                "type": "string",
+                "description": "provider's address",
+                "example": "4100 Lake Otis Parkway Suite 322 322, Anchorage, AK"
+              },
+              "bookingType": {
+                "type": "string",
+                "description": "the provider's chosen scheduling method",
+                "enum": ["NONE", "CONCIERGE", "REQUEST", "INSTANT", "HYBRID"],
+                "example": "INSTANT"
+              },
+              "timezone": {
+                "type": "string",
+                "example": "America/Anchorage"
+              },
+              "taxonomies": {
+                "type": "array",
+                "description": "the provider's specialties",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "taxonomyCode": {
+                      "type": "string",
+                      "description": "specialty code",
+                      "example": "207Q00000X"
+                    },
+                    "taxonomyDisplayName": {
+                      "type": "string",
+                      "description": "provider specialty friendly name",
+                      "example": "Family Physician"
+                    },
+                    "taxonomyDescription": {
+                      "type": "string",
+                      "description": "specialty friendly name",
+                      "example": "Family Medicine"
+                    }
+                  }
+                }
+              },
+              "appointmentTypes": {
+                "type": "array",
+                "description": "list of appointment types that the providers offers at the chosen location",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "appointment type's ID",
+                      "example": "251"
+                    },
+                    "displayName": {
+                      "type": "string",
+                      "description": "appointment type's friendly display name",
+                      "example": "New Patient"
+                    },
+                    "duration": {
+                      "type": "integer",
+                      "description": "Appointment duration in minutes",
+                      "example": "20"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "medical code",
+                      "example": "72141"
+                    },
+                    "isTelemedicine": {
+                      "type": "boolean",
+                      "description": "indicates whether appointment type is telemedicine",
+                      "example": true
+                    },
+                    "nextAvailableSlot": {
+                      "type": "string",
+                      "description": "provider's next available appointment (only relevant for booking).",
+                      "example": "2019-11-03T15:45:00.000Z"
+                    },
+                    "availableSlots": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "startTime": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "getBookingDataResponse": {
+        "type": "object",
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "provider's NPI"
+          },
+          "npiType": {
+            "type": "string",
+            "description": "Npi type, either an individual or an organization. If not entered, the default is an individual",
+            "enum": ["INDIVIDUAL", "ORGANIZATION"]
+          },
+          "address": {
+            "type": "string",
+            "description": "provider's address"
+          },
+          "openHours": {
+            "type": "object",
+            "description": "The provider's working hours grouped by days (Exmaple: { Mon: { open: '08:00', close: '17:00' } } )",
+            "properties": {
+              "[day name]": {
+                "type": "object",
+                "description": "Day's working hours details",
+                "properties": {
+                  "open": {
+                    "type": "string",
+                    "description": "24h representation of the opening time (provider's timezone)",
+                    "example": "08:00"
+                  },
+                  "close": {
+                    "type": "string",
+                    "description": "24h representation of the closing time (provider's timezone)",
+                    "example": "17:00"
+                  }
+                }
+              }
+            }
+          },
+          "bookingType": {
+            "type": "string",
+            "description": "the provider's chosen scheduling method",
+            "enum": ["NONE", "CONCIERGE", "REQUEST", "INSTANT", "HYBRID"]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "appointmentTypes": {
+            "type": "array",
+            "description": "list of appointment types that the providers offers at the chosen location",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "appointment type's ID",
+                  "example": "251"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "appointment type's friendly display name",
+                  "example": "New Patient"
+                },
+                "duration": {
+                  "type": "integer",
+                  "description": "Appointment duration in minutes",
+                  "example": "20"
+                },
+                "code": {
+                  "type": "string",
+                  "description": "medical code",
+                  "example": "72141"
+                },
+                "isTelemedicine": {
+                  "type": "boolean",
+                  "description": "indicates whether appointment type is telemedicine",
+                  "example": true
+                },
+                "nextAvailableSlot": {
+                  "type": "string",
+                  "description": "provider's next available appointment (only relevant for booking).",
+                  "example": "2019-11-03T15:45:00.000Z"
+                },
+                "availableSlots": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "startTime": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "questionnaire": {
+            "type": "array",
+            "description": "questions that the patient is required to answer before booking the appointment. The answer to some of the question may prevent the member from booking. The answers to these questions should be included in the BookRequest.",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/OpenQuestion"
+                },
+                {
+                  "$ref": "#/components/schemas/MultipleChoice"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "OpenQuestion": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "description": "question's ID",
+            "example": "15"
+          },
+          "questionType": {
+            "type": "string",
+            "description": "the type of question, either an open question or a multiple choice",
+            "enum": ["OPEN_QUESTION"],
+            "example": "OPEN_QUESTION"
+          },
+          "question": {
+            "type": "string",
+            "description": "the actual question for the patient to answer",
+            "example": "How old are you?"
+          },
+          "goto": {
+            "type": "string",
+            "description": "the ID of the next question to ask",
+            "example": "12"
+          }
+        }
+      },
+      "MultipleChoice": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "description": "question's ID",
+            "example": "18"
+          },
+          "questionType": {
+            "type": "string",
+            "description": "the type of question, either an open question or a multiple choice question.",
+            "enum": ["MULTIPLE_CHOICE"],
+            "example": "MULTIPLE_CHOICE"
+          },
+          "question": {
+            "type": "string",
+            "description": "the actual question for the patient to answer",
+            "example": "Do you have a family history of colorectal cancer?"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "the id of the answer",
+                  "example": "1"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "answer's friendly display name",
+                  "example": "Yes, I do"
+                }
+              }
+            }
+          }
+        }
+      },
+      "providerAvailabilityRequest": {
+        "type": "object",
+        "required": ["providers"],
+        "properties": {
+          "memberToken": {
+            "type": "string",
+            "description": "Member token obtained from the identifyPatient endpoint. Provider's availability can, in some scenarios, change based on the patient's attributes.",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+          },
+          "providers": {
+            "type": "array",
+            "description": "the providers for whom you would like to get availability, limited for 20 providers",
+            "items": {
+              "type": "object",
+              "required": ["npi"],
+              "properties": {
+                "npi": {
+                  "type": "string",
+                  "description": "provider's NPI",
+                  "example": "1396709168"
+                },
+                "address": {
+                  "type": "string",
+                  "description": "provider's address",
+                  "example": "4100 LAKE OTIS PKWY STE. 322, ANCHORAGE, AK"
+                }
+              }
+            }
+          },
+          "npiType": {
+            "type": "string",
+            "description": "npi type",
+            "enum": ["INDIVIDUAL", "ORGANIZATION"],
+            "example": "INDIVIDUAL"
+          },
+          "code": {
+            "description": "CPT code",
+            "type": "string",
+            "example": "74134"
+          }
+        }
+      },
+      "getBookingDataRequest": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Address of the chosen provider."
+          },
+          "startDateTime": {
+            "type": "string",
+            "description": "Beginning date to start searching for time slots. If not provided, defaults to the date of the request",
+            "example": "2019-03-04T10:00:00.000Z"
+          },
+          "endDateTime": {
+            "type": "string",
+            "description": "End date to stop searching for time slots. If not provided, defaults to one week after the start parameter. Limited to 28 days after start parameter.",
+            "example": "2019-03-04T10:00:00.000Z"
+          },
+          "npiType": {
+            "type": "string",
+            "description": "Npi type, either an individual or an organization. If not entered, the default is an individual",
+            "enum": ["INDIVIDUAL", "ORGANIZATION"]
+          },
+          "code": {
+            "type": "string",
+            "description": "CPT code",
+            "example": "74134"
+          },
+          "memberToken": {
+            "type": "string",
+            "description": "member token obtained from /patient/identify endpoint.",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+          }
+        }
+      },
+      "FreeTextRequest": {
+        "type": "object",
+        "required": ["freeText"],
+        "properties": {
+          "freeText": {
+            "type": "string",
+            "description": "Free text to match against Vim's search terms"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/searchFilters"
+          },
+          "geo": {
+            "$ref": "#/components/schemas/geo"
+          },
+          "memberToken": {
+            "description": "Member token obtained from the identifyPatient endpoint. Certain member attributes can affect the provider's ranking in the search results, for example a provider that accepts the member's insurer would rank higher than providers that do not.",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791",
+            "type": "string"
+          }
+        }
+      },
+      "TaxonomiesResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "description": "Taxonomies total count",
+            "example": 1000
+          },
+          "data": {
+            "type": "array",
+            "description": "Taxonomies list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "codes": {
+                  "type": "array",
+                  "description": "Taxonomy codes",
+                  "example": ["102L00000X"],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Taxonomy description",
+                  "example": "Psychoanalyst"
+                },
+                "isGeneral": {
+                  "type": "boolean",
+                  "example": "true",
+                  "description": "Is general taxonomy"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AsoMetadataRequest": {
+        "type": "object",
+        "required": ["memberToken"],
+        "properties": {
+          "memberToken": {
+            "type": "string",
+            "description": "The member token"
+          }
+        }
+      },
+      "AsoMetadataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["defaultTier", "tiers"],
+            "properties": {
+              "defaultTier": {
+                "type": "string"
+              },
+              "tiers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "description", "title", "showInNetwork"],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "showInNetwork": {
+                      "type": "boolean"
+                    },
+                    "overrideColor": {
+                      "type": "string",
+                      "enum": ["red", "gray", "darkGray", "orange"]
+                    },
+                    "shouldShowStatus": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ShareProviderRequest": {
+        "type": "object",
+        "required": ["npi", "locationId", "memberToken", "phoneNumber"],
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "NPI of the chosen provider."
+          },
+          "locationId": {
+            "type": "number",
+            "description": "The provider location id."
+          },
+          "memberToken": {
+            "type": "string",
+            "description": "The member token"
+          },
+          "insurer": {
+            "type": "string",
+            "description": "insurer of the patient."
+          },
+          "phoneNumber": {
+            "type": "object",
+            "required": ["number", "countryDialingCode"],
+            "properties": {
+              "countryDialingCode": {
+                "type": "string"
+              },
+              "number": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ShareProviderResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "correlationId": {
+                "type": "string",
+                "description": "Correlation uuid",
+                "example": "0502b2e9-8352-4378-adae-42ffbd5d045b"
+              }
+            }
+          }
+        }
+      },
+      "FindProviderRequest": {
+        "properties": {
+          "searchTerm": {
+            "type": "object",
+            "properties": {
+              "term": {
+                "type": "string"
+              },
+              "category": {
+                "$ref": "#/components/schemas/category"
+              }
+            }
+          },
+          "filters": {
+            "$ref": "#/components/schemas/searchFilters"
+          },
+          "memberToken": {
+            "description": "Member token obtained from the identifyPatient endpoint. Certain member attributes can affect the provider's ranking in the search results, for example a provider that accepts the member's insurer would rank higher than providers that do not.",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791",
+            "type": "string"
+          },
+          "geo": {
+            "$ref": "#/components/schemas/geo"
+          },
+          "insurer": {
+            "description": "Member's insurer",
+            "type": "string"
+          },
+          "plan": {
+            "description": "Member's health plan",
+            "type": "string"
+          },
+          "bcbsMemberPrefix": {
+            "description": "blue cross blue shield prefix",
+            "type": "string"
+          },
+          "patientGender": {
+            "description": "Used to improve results order using providers' clinical match",
+            "type": "string",
+            "enum": ["MALE", "FEMALE", "UNSPECIFIED"]
+          },
+          "patientAge": {
+            "description": "Used to improve results order using providers' clinical match",
+            "type": "number"
+          },
+          "icd": {
+            "description": "ICD10 code. Used to improve results' clinical match",
+            "example": "M722",
+            "oneOf": [{ "type": "string" }, { "type": "array" }]
+          },
+          "cpt": {
+            "description": "CPT code. Used to improve results' clinical match",
+            "type": "string",
+            "example": "1480"
+          },
+          "etg": {
+            "description": "Clinical epiosde name. Used to improve results' clinical match",
+            "type": "string",
+            "example": "Diabetes"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "clinicSearchPreferences": {
+            "type": "boolean"
+          },
+          "healthSystemId": {
+            "type": "integer"
+          },
+          "clinicId": {
+            "type": "integer"
+          }
+        }
+      },
+      "searchFilters": {
+        "title": "Search API filters",
+        "description": "Filters to be used in the search. Only Results that match the filters would be returned.",
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": ["MALE", "FEMALE"]
+          },
+          "distance": {
+            "type": "integer",
+            "description": "Distance in miles",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "onlyBookableProviders": {
+            "type": "boolean"
+          },
+          "onlyInNetwork": {
+            "type": "boolean",
+            "description": "returns only in-network providers. When used must pass plan parameter or verified memberToken"
+          },
+          "taxonomy": {
+            "oneOf": [{ "type": "string" }, { "type": "array" }]
+          },
+          "state": {
+            "type": "string"
+          },
+          "npiList": {
+            "type": "array",
+            "description": "Providers npi list",
+            "items": {
+              "type": "string"
+            }
+          },
+          "spokenLanguage": {
+            "type": "string",
+            "description": "Language code in ISO 639-1 format. For full list look at https://www.constitution.org/lg/languagecode.html",
+            "enum": [
+              "aa",
+              "ab",
+              "af",
+              "ak",
+              "am",
+              "ar",
+              "an",
+              "hy",
+              "is",
+              "my",
+              "bo",
+              "cy",
+              "cs",
+              "de",
+              "nl",
+              "el",
+              "eu",
+              "fr",
+              "ka",
+              "mk",
+              "mi",
+              "ms",
+              "fa",
+              "ro",
+              "sk",
+              "sq",
+              "zh",
+              "as",
+              "av",
+              "ay",
+              "az",
+              "ba",
+              "bm",
+              "be",
+              "bn",
+              "bi",
+              "bs",
+              "br",
+              "bg",
+              "ca",
+              "ch",
+              "ce",
+              "cv",
+              "kw",
+              "co",
+              "cr",
+              "da",
+              "dv",
+              "dz",
+              "en",
+              "et",
+              "ee",
+              "fo",
+              "fj",
+              "fi",
+              "fy",
+              "ff",
+              "gd",
+              "ga",
+              "gl",
+              "gv",
+              "gn",
+              "gu",
+              "ht",
+              "ha",
+              "he",
+              "hz",
+              "hi",
+              "ho",
+              "hr",
+              "hu",
+              "ig",
+              "ii",
+              "iu",
+              "id",
+              "ik",
+              "it",
+              "jv",
+              "ja",
+              "kl",
+              "kn",
+              "ks",
+              "kr",
+              "kk",
+              "km",
+              "ki",
+              "rw",
+              "ky",
+              "kv",
+              "kg",
+              "ko",
+              "kj",
+              "ku",
+              "lo",
+              "lv",
+              "li",
+              "ln",
+              "lt",
+              "lb",
+              "lu",
+              "lg",
+              "mh",
+              "ml",
+              "mr",
+              "mg",
+              "mt",
+              "mn",
+              "na",
+              "nv",
+              "nr",
+              "nd",
+              "ng",
+              "ne",
+              "nn",
+              "nb",
+              "no",
+              "ny",
+              "oc",
+              "oj",
+              "or",
+              "om",
+              "os",
+              "pa",
+              "pl",
+              "pt",
+              "ps",
+              "qu",
+              "rm",
+              "rn",
+              "ru",
+              "sg",
+              "si",
+              "sl",
+              "se",
+              "sm",
+              "sn",
+              "sd",
+              "so",
+              "st",
+              "es",
+              "sc",
+              "sr",
+              "ss",
+              "su",
+              "sw",
+              "sv",
+              "ty",
+              "ta",
+              "tt",
+              "te",
+              "tg",
+              "tl",
+              "th",
+              "ti",
+              "to",
+              "tn",
+              "ts",
+              "tk",
+              "tr",
+              "tw",
+              "ug",
+              "uk",
+              "ur",
+              "uz",
+              "ve",
+              "vi",
+              "wa",
+              "wo",
+              "xh",
+              "yi",
+              "yo",
+              "za",
+              "zu"
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "responseMessage": {
+            "type": "string"
+          }
+        },
+        "title": "Error Schema"
+      },
+      "AuthenticationResponse": {
+        "type": "object",
+        "required": ["access_token", "refresh_token", "expiry"],
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          },
+          "expiry": {
+            "type": "string",
+            "example": "2019-11-08T15:59:41.496Z",
+            "description": "access token expiration time"
+          }
+        }
+      },
+      "GetAppointmentRequestResponse": {
+        "type": "object",
+        "required": ["address", "timezone", "appointmentTypeId", "npi", "status"],
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "provider's NPI",
+            "example": "1396709168"
+          },
+          "address": {
+            "type": "string",
+            "description": "provider's address",
+            "example": "4100 Lake Otis Parkway Suite 322 322, Anchorage, AK"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Provider's office timezone",
+            "example": "America/New_York"
+          },
+          "appointmentTypeId": {
+            "type": "string",
+            "description": "chosen appointment type ID, must be one of the values returned in a provider/getBookingData response.",
+            "example": "NEW_PATIENT"
+          },
+          "timePreferences": {
+            "type": "string",
+            "description": "patient's time preferences for the appointment",
+            "example": "Monday, 9AM-14PM"
+          },
+          "optionalTimes": {
+            "type": "array",
+            "description": "patient's selected available appointments time slots",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "2020-01-07T07:05:00.000Z",
+              "2020-01-07T07:50:00.000Z",
+              "2020-01-07T08:05:00.000Z"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["REQUESTED", "BOOKED", "CANCELED", "UNABLE_TO_BOOK"]
+          }
+        }
+      },
+      "providersAvailabilityResponse": {
+        "type": "object",
+        "required": ["providers"],
+        "properties": {
+          "providers": {
+            "type": "array",
+            "description": "list of providers and their next availability",
+            "items": {
+              "type": "object",
+              "properties": {
+                "npi": {
+                  "type": "string",
+                  "description": "provider's NPI",
+                  "example": "1396709168"
+                },
+                "address": {
+                  "type": "string",
+                  "description": "provider's address",
+                  "example": "4100 LAKE OTIS PKWY STE. 322, ANCHORAGE, AK"
+                },
+                "bookingType": {
+                  "type": "string",
+                  "description": "the provider's chosen scheduling method",
+                  "enum": ["NONE", "CONCIERGE", "REQUEST", "INSTANT", "HYBRID"],
+                  "example": "INSTANT"
+                },
+                "timezone": {
+                  "type": "string",
+                  "description": "Provider's office timezone",
+                  "example": "America/New_York"
+                },
+                "appointmentTypes": {
+                  "type": "array",
+                  "description": "list of appointment types that the providers offers at the chosen location",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "appointment type's ID",
+                        "example": "1"
+                      },
+                      "displayName": {
+                        "type": "string",
+                        "description": "appointment type's friendly display name",
+                        "example": "New Patient"
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "description": "Appointment duration in minutes",
+                        "example": "20"
+                      },
+                      "code": {
+                        "type": "string",
+                        "description": "appointment type's medical code",
+                        "example": "72141"
+                      },
+                      "isTelemedicine": {
+                        "type": "boolean",
+                        "description": "indicates whether appointment type is telemedicine",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "memberToken": {
+            "type": "string",
+            "description": "the specific member for which this response applies, if provided in the request.",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+          }
+        }
+      },
+      "BookResponse": {
+        "type": "object",
+        "required": ["appointmentId"],
+        "properties": {
+          "appointmentId": {
+            "type": "string",
+            "description": "Unique identifier for the booked appointment",
+            "example": "1e690117-c273-4f6d-b65f-f06e94bdbded"
+          }
+        }
+      },
+      "Empty": {
+        "type": "object",
+        "title": "Empty Schema"
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "required": ["access_token", "refresh_token"],
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          }
+        }
+      },
+      "AppointmentRequest": {
+        "type": "object",
+        "required": ["address", "appointmentTypeId", "member", "npi"],
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "provider's NPI",
+            "example": "1396709168"
+          },
+          "address": {
+            "type": "string",
+            "description": "provider's address",
+            "example": "4100 Lake Otis Parkway Suite 322 322, Anchorage, AK"
+          },
+          "appointmentTypeId": {
+            "type": "string",
+            "description": "chosen appointment type ID, must be one of the values returned in a provider/getBookingData response.",
+            "example": "NEW_PATIENT"
+          },
+          "timePreferences": {
+            "type": "string",
+            "description": "patient's time preferences for the appointment",
+            "example": "Monday, 9AM-14PM"
+          },
+          "optionalTimes": {
+            "type": "array",
+            "description": "patient's selected available appointments time slots",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "2020-01-07T07:05:00.000Z",
+              "2020-01-07T07:50:00.000Z",
+              "2020-01-07T08:05:00.000Z"
+            ]
+          },
+          "reasonForVisit": {
+            "type": "string",
+            "description": "free text reason for visit provided by the patient",
+            "example": "headache and high fever"
+          },
+          "member": {
+            "type": "object",
+            "required": ["memberToken"],
+            "description": "member's properties",
+            "properties": {
+              "memberToken": {
+                "type": "string",
+                "description": "member's unique identifier, obtained from the IdentifyMember endpoint",
+                "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+              },
+              "phoneNumber": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "description": "member's phone number",
+                    "example": "6512196458"
+                  },
+                  "countryDialingCode": {
+                    "type": "string",
+                    "description": "country dialing code",
+                    "example": "+1"
+                  }
+                }
+              },
+              "email": {
+                "type": "string",
+                "description": "member's email address",
+                "example": "member@gmail.com"
+              },
+              "language": {
+                "type": "string",
+                "description": "member's preferred language",
+                "example": "en"
+              }
+            }
+          },
+          "questionnaire": {
+            "type": "array",
+            "description": "patient's answers to questions required by the provider, as a prerequisite for booking",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string",
+                  "description": "the id of the question being answered",
+                  "example": "15"
+                },
+                "answer": {
+                  "type": "string",
+                  "description": "the patient's answer",
+                  "example": "MALE"
+                }
+              }
+            }
+          },
+          "requestToExpedite": {
+            "type": "boolean",
+            "description": "Whether to request the provider to try and expedite the appointment to sooner time if one becomes available",
+            "example": true
+          }
+        }
+      },
+      "ConciergeRequest": {
+        "type": "object",
+        "required": ["address", "appointmentTypeId", "member", "npi", "startDateTime"],
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "provider's NPI",
+            "example": "1396709168"
+          },
+          "address": {
+            "type": "string",
+            "description": "provider's address",
+            "example": "4100 Lake Otis Parkway Suite 322 322, Anchorage, AK"
+          },
+          "appointmentTypeId": {
+            "type": "number",
+            "description": "chosen appointment type ID, must be one of the values returned in a provider/getBookingData response.",
+            "example": 48
+          },
+          "startDateTime": {
+            "type": "string",
+            "description": "the start time of the appointment in UTC",
+            "example": "2019-03-04T10:00:00.000Z"
+          },
+          "reasonForVisit": {
+            "type": "string",
+            "description": "free text reason for visit provided by the patient",
+            "example": "headache and high fever"
+          },
+          "requestToken": {
+            "type": "string",
+            "description": "booking request unique identifier, obtained from concierge booking request",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+          },
+          "member": {
+            "type": "object",
+            "required": ["memberToken"],
+            "description": "member's properties",
+            "properties": {
+              "memberToken": {
+                "type": "string",
+                "description": "member's unique identifier, obtained from the IdentifyMember endpoint",
+                "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+              },
+              "phoneNumber": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "description": "member's phone number",
+                    "example": "6512196458"
+                  },
+                  "countryDialingCode": {
+                    "type": "string",
+                    "description": "country dialing code",
+                    "example": "+1"
+                  }
+                }
+              },
+              "language": {
+                "type": "string",
+                "description": "member's preferred language",
+                "example": "en"
+              }
+            }
+          }
+        }
+      },
+      "GetAllInsurersResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "displayName": {
+              "type": "string",
+              "example": "INSURER NAME",
+              "description": "insurer's friendly display name."
+            }
+          }
+        }
+      },
+      "IdentifyRequest": {
+        "type": "object",
+        "required": ["dateOfBirth", "firstName", "lastName", "memberId"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "John",
+            "description": "The member's first name"
+          },
+          "middleName": {
+            "type": "string",
+            "example": "Richard",
+            "description": "The member's middle name"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe",
+            "description": "The member's last name"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "example": "MM/DD/YYYY",
+            "description": "The member's date of birth"
+          },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
+          },
+          "memberId": {
+            "type": "string",
+            "example": "ZDN63849927",
+            "description": "The member's id in the insurance company"
+          },
+          "planName": {
+            "type": "string",
+            "example": "HERITAGE (AK) - C129",
+            "description": "The member's health plan"
+          },
+          "planStartDate": {
+            "type": "string",
+            "example": "MM/DD/YYYY",
+            "description": "The member's plan start date"
+          },
+          "planExpirationDate": {
+            "type": "string",
+            "example": "MM/DD/YYYY",
+            "description": "The member's plan expiration date"
+          },
+          "relationshipToPrimaryMember": {
+            "$ref": "#/components/schemas/RelationshipToPrimaryMember"
+          },
+          "phoneNumber": {
+            "type": "object",
+            "required": ["number", "countryDialingCode"],
+            "properties": {
+              "number": {
+                "type": "string",
+                "example": "9876543210",
+                "description": "The member's phone number"
+              },
+              "countryDialingCode": {
+                "type": "string",
+                "example": "+1",
+                "description": "The member's country dialing code"
+              }
+            }
+          },
+          "email": {
+            "type": "string",
+            "example": "example@example.com",
+            "description": "The member's email"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          }
+        }
+      },
+      "BookRequest": {
+        "type": "object",
+        "description": "Books an appointment for a patient at the provider's office",
+        "required": ["address", "appointmentTypeId", "member", "npi", "startDateTime"],
+        "properties": {
+          "npi": {
+            "type": "string",
+            "description": "provider's NPI",
+            "example": "1396709168"
+          },
+          "npiType": {
+            "type": "string",
+            "description": "Npi type, either an individual or an organization. If not entered, the default is an individual",
+            "example": "INDIVIDUAL"
+          },
+          "address": {
+            "type": "string",
+            "description": "provider's address",
+            "example": "4100 Lake Otis Parkway Suite 322 322, Anchorage, AK"
+          },
+          "appointmentTypeId": {
+            "type": "string",
+            "description": "chosen appointment type ID, must be one of the values returned in a provider/getBookingData response.",
+            "example": "48"
+          },
+          "startDateTime": {
+            "type": "string",
+            "description": "the requested start time of the appointment",
+            "example": "2019-03-04T10:00:00.000Z"
+          },
+          "reasonForVisit": {
+            "type": "string",
+            "description": "free text reason for visit provided by the patient",
+            "example": "headache and high fever"
+          },
+          "insurer": {
+            "type": "string",
+            "example": "INSURER NAME"
+          },
+          "ehrInsuranceId": {
+            "type": "string",
+            "description": "optional, the id of the insurance the ehr is familiar with",
+            "example": "14"
+          },
+          "member": {
+            "type": "object",
+            "description": "member's properties",
+            "required": ["memberToken"],
+            "properties": {
+              "memberToken": {
+                "type": "string",
+                "description": "member's unique identifier, obtained from the IdentifyMember endpoint",
+                "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+              },
+              "phoneNumber": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "description": "member's phone number",
+                    "example": "6512196458"
+                  },
+                  "countryDialingCode": {
+                    "type": "string",
+                    "description": "country dialing code",
+                    "example": "+1"
+                  }
+                }
+              },
+              "email": {
+                "type": "string",
+                "description": "member's email address",
+                "example": "member@gmail.com"
+              },
+              "language": {
+                "type": "string",
+                "description": "member's preferred language",
+                "example": "en"
+              },
+              "gender": {
+                "$ref": "#/components/schemas/Gender"
+              },
+              "address": {
+                "$ref": "#/components/schemas/Address"
+              }
+            }
+          },
+          "questionnaire": {
+            "type": "array",
+            "description": "patient's answers to questions required by the provider, as a prerequisite for booking",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string",
+                  "description": "the id of the question being answered",
+                  "example": "15"
+                },
+                "answer": {
+                  "type": "string",
+                  "description": "the patient's answer",
+                  "example": "MALE"
+                }
+              }
+            }
+          },
+          "requestToExpedite": {
+            "type": "boolean",
+            "description": "Whether to request the provider to try and expedite the appointment to sooner time if one becomes available",
+            "example": true
+          }
+        }
+      },
+      "identifyResponse": {
+        "type": "object",
+        "required": ["verificationStatus", "memberToken"],
+        "properties": {
+          "memberToken": {
+            "type": "string",
+            "description": "patient's unique identifier, to be used in other requests such as /appointment/book or /appointment/request",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+          },
+          "verificationStatus": {
+            "type": "boolean",
+            "description": "indicates whether or not Vim verified the member's insurance",
+            "example": true
+          },
+          "tokenExpirationDate": {
+            "type": "string",
+            "description": "Member token expiration time",
+            "example": "2020-12-02T18:31:21Z"
+          }
+        }
+      },
+      "getPatientAppointmentsRequest": {
+        "type": "object",
+        "description": "returns all of the patient's appointments that were booked through Vim",
+        "required": ["memberToken"],
+        "properties": {
+          "memberToken": {
+            "type": "string",
+            "description": "member token obtained from /patient/identify endpoint.",
+            "example": "bdb77d01-20e1-449b-93c5-53bda9103791"
+          }
+        }
+      },
+      "getPatientAppointmentsResponse": {
+        "type": "object",
+        "required": ["appointments"],
+        "properties": {
+          "appointments": {
+            "type": "array",
+            "description": "patient's appointments that were booked through Vim",
+            "items": {
+              "$ref": "#/components/schemas/Appointment"
+            }
+          }
+        }
+      },
+      "findProvidersResponse": {
+        "type": "object",
+        "required": ["providers"],
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "number"
+                },
+                "npi": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "suffix": {
+                  "type": "string"
+                },
+                "taxonomies": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/taxonomies"
+                  }
+                },
+                "locations": {
+                  "type": "array",
+                  "description": "All of the provider’s locations that match the search criteria. Locations are ordered based on their match score.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "address": {
+                        "description": "Full address of the provider office",
+                        "type": "string"
+                      },
+                      "addressLine1": {
+                        "type": "string"
+                      },
+                      "addressLine2": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "zip": {
+                        "type": "string"
+                      },
+                      "officeName": {
+                        "description": "Name of the provider office",
+                        "type": "string"
+                      },
+                      "timezone": {
+                        "type": "string",
+                        "description": "timezone",
+                        "example": "America/New_York"
+                      },
+                      "bookingType": {
+                        "type": "string",
+                        "enum": ["NONE", "CONCIERGE", "REQUEST", "INSTANT", "HYBRID"]
+                      },
+                      "distance": {
+                        "description": "Distance from specified geo in miles.",
+                        "type": "number"
+                      },
+                      "geo": {
+                        "description": "Geocode of the provider office.",
+                        "type": "object",
+                        "properties": {
+                          "latitude": {
+                            "type": "number"
+                          },
+                          "longitude": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "appointmentTypes": {
+                        "type": "array",
+                        "description": "list of appointment types that the providers offers at the chosen location",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "appointment type's ID",
+                              "example": "251"
+                            },
+                            "displayName": {
+                              "type": "string",
+                              "description": "appointment type's friendly display name",
+                              "example": "New Patient"
+                            },
+                            "duration": {
+                              "type": "integer",
+                              "description": "Appointment duration in minutes",
+                              "example": "20"
+                            },
+                            "nextAvailableSlot": {
+                              "type": "string",
+                              "description": "provider's next available appointment (only relevant for booking).",
+                              "example": "2019-11-03T15:45:00.000Z"
+                            }
+                          }
+                        }
+                      },
+                      "phoneNumber": {
+                        "type": "object",
+                        "properties": {
+                          "countryDialingCode": {
+                            "type": "string",
+                            "example": "+1"
+                          },
+                          "number": {
+                            "type": "string",
+                            "example": "9999996999"
+                          }
+                        }
+                      },
+                      "fax": {
+                        "type": "object",
+                        "properties": {
+                          "number": {
+                            "type": "string",
+                            "description": "member's phone number",
+                            "example": "6512196458"
+                          },
+                          "countryDialingCode": {
+                            "type": "string",
+                            "description": "country dialing code",
+                            "example": "+1"
+                          }
+                        }
+                      },
+                      "bookingHorizon": {
+                        "type": "string",
+                        "enum": ["sameDay", "sameWeek", "sameMonth", "overAMonth", "notAccepting"]
+                      }
+                    }
+                  }
+                },
+                "profilePicture": {
+                  "type": "string",
+                  "description": "URL for the provider's profile picture."
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "ratingCount": {
+                  "type": "number"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "gender": {
+                  "type": "string",
+                  "enum": ["MALE", "FEMALE"]
+                },
+                "languages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "iso639-1": {
+                        "type": "string",
+                        "example": "sv"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Swedish"
+                      },
+                      "nativeName": {
+                        "type": "string",
+                        "example": "svenska"
+                      }
+                    }
+                  }
+                },
+                "acceptNewPatients": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "data": {
+            "total": 3089,
+            "providers": [
+              {
+                "ranking": 1,
+                "npi": "1447589916",
+                "firstName": "Sau mui",
+                "lastName": "Chan-goh",
+                "suffix": "Arnp",
+                "locations": [
+                  {
+                    "address": "1629 N 45th St, Seattle, WA, 98103",
+                    "bookingType": "CONCIERGE",
+                    "timezone": "America/Chicago",
+                    "geo": {
+                      "latitude": 31.11,
+                      "longitude": 11.22
+                    },
+                    "appointmentTypes": {
+                      "id": "926",
+                      "description": "New patient"
+                    },
+                    "distance": 0,
+                    "officeName": "Alivation Health Llc",
+                    "phoneMumbers": [
+                      {
+                        "number": "9999999999",
+                        "countryDialingCode": "+1"
+                      },
+                      {
+                        "number": "8888888888",
+                        "countryDialingCode": "+1"
+                      }
+                    ],
+                    "fax": {
+                      "number": "7799999999",
+                      "countryDialingCode": "+1"
+                    },
+                    "bookingHorizon": "sameDay"
+                  },
+                  {
+                    "address": "1629 N 45th St, Seattle, WA, 98103",
+                    "bookingType": "CONCIERGE",
+                    "geo": {
+                      "latitude": 31.11,
+                      "longitude": 11.22
+                    },
+                    "appointmentTypes": {
+                      "id": "926",
+                      "description": "New patient"
+                    },
+                    "distance": 0,
+                    "officeName": "Best Health Clinic",
+                    "phoneMumbers": [
+                      {
+                        "number": "7799999999",
+                        "countryDialingCode": "+1"
+                      },
+                      {
+                        "number": "8888668888",
+                        "countryDialingCode": "+1"
+                      }
+                    ],
+                    "fax": {
+                      "number": "7799999999",
+                      "countryDialingCode": "+1"
+                    },
+                    "bookingHorizon": null
+                  },
+                  {
+                    "address": "1410 Ne 65th St, Seattle, WA, 98115",
+                    "bookingType": "CONCIERGE",
+                    "geo": {
+                      "latitude": 31.11,
+                      "longitude": 11.22
+                    },
+                    "appointmentTypes": {
+                      "id": "926",
+                      "description": "New patient"
+                    },
+                    "distance": 1.5,
+                    "officeName": "Best Health Clinic",
+                    "phoneMumbers": [
+                      {
+                        "number": "7799999999",
+                        "countryDialingCode": "+1"
+                      },
+                      {
+                        "number": "8888668888",
+                        "countryDialingCode": "+1"
+                      }
+                    ],
+                    "fax": {
+                      "number": "7799999999",
+                      "countryDialingCode": "+1"
+                    },
+                    "bookingHorizon": "sameMonth"
+                  }
+                ],
+                "taxonomies": [
+                  {
+                    "taxonomyCode": "363L00000X",
+                    "taxonomyDisplayName": "Nurse Practitioner"
+                  },
+                  {
+                    "taxonomyCode": "363LF0000X",
+                    "taxonomyDisplayName": "Family Nurse Practitioner"
+                  }
+                ],
+                "profilePicture": null
+              },
+              {
+                "ranking": 2,
+                "npi": "1679512487",
+                "firstName": "John",
+                "lastName": "Olson jr",
+                "suffix": "Md",
+                "locations": [
+                  {
+                    "address": "1629 N 45th St, Seattle, WA, 98103",
+                    "bookingType": "CONCIERGE",
+                    "geo": {
+                      "latitude": 31.11,
+                      "longitude": 11.22
+                    },
+                    "appointmentTypes": {
+                      "id": "926",
+                      "description": "New patient"
+                    },
+                    "distance": 0,
+                    "officeName": "Best Health Clinic",
+                    "phoneMumbers": [
+                      {
+                        "number": "7799999999",
+                        "countryDialingCode": "+1"
+                      },
+                      {
+                        "number": "8888668888",
+                        "countryDialingCode": "+1"
+                      }
+                    ],
+                    "fax": {
+                      "number": "7799999999",
+                      "countryDialingCode": "+1"
+                    },
+                    "bookingHorizon": "sameWeek"
+                  },
+                  {
+                    "address": "1629 N 45th St, Seattle, WA, 98103",
+                    "bookingType": "CONCIERGE",
+                    "geo": {
+                      "latitude": 31.11,
+                      "longitude": 11.22
+                    },
+                    "appointmentTypes": {
+                      "id": "926",
+                      "description": "New patient"
+                    },
+                    "distance": 0,
+                    "officeName": "Best Health Clinic",
+                    "phoneMumbers": [
+                      {
+                        "number": "7799999999",
+                        "countryDialingCode": "+1"
+                      },
+                      {
+                        "number": "8888668888",
+                        "countryDialingCode": "+1"
+                      }
+                    ],
+                    "fax": {
+                      "number": "7799999999",
+                      "countryDialingCode": "+1"
+                    },
+                    "bookingHorizon": "sameWeek"
+                  },
+                  {
+                    "address": "1629 N 45th St, Seattle, WA, 98103",
+                    "bookingType": "CONCIERGE",
+                    "geo": {
+                      "latitude": 31.11,
+                      "longitude": 11.22
+                    },
+                    "appointmentTypes": {
+                      "id": "926",
+                      "description": "New patient"
+                    },
+                    "distance": 0,
+                    "officeName": "Best Health Clinic",
+                    "phoneMumbers": [
+                      {
+                        "number": "7799999999",
+                        "countryDialingCode": "+1"
+                      },
+                      {
+                        "number": "8888668888",
+                        "countryDialingCode": "+1"
+                      }
+                    ],
+                    "fax": {
+                      "number": "7799999999",
+                      "countryDialingCode": "+1"
+                    },
+                    "bookingHorizon": "sameWeek"
+                  }
+                ],
+                "taxonomies": [
+                  {
+                    "taxonomyCode": "207Q00000X",
+                    "taxonomyDisplayName": "Family Physician"
+                  }
+                ],
+                "profilePicture": null
+              }
+            ]
+          }
+        }
+      },
+      "autocompleteResponse": {
+        "type": "object",
+        "required": ["searchTerm", "suggestions"],
+        "properties": {
+          "searchTerm": {
+            "type": "string",
+            "example": "heart",
+            "description": "The request's free text input."
+          },
+          "suggestions": {
+            "type": "object",
+            "example": {
+              "provider": [
+                {
+                  "npi": "1396709168",
+                  "ranking": 1,
+                  "firstName": "John",
+                  "middleName": "d",
+                  "lastName": "",
+                  "suffix": "",
+                  "profilePicture": "http://johnhartasdf.com",
+                  "taxonomies": [
+                    {
+                      "taxonomyCode": "363L00000X",
+                      "taxonomyDisplayName": "Nurse Practitioner"
+                    },
+                    {
+                      "taxonomyCode": "363LF0000X",
+                      "taxonomyDisplayName": "Family Nurse Practitioner"
+                    }
+                  ]
+                }
+              ],
+              "procedure": [
+                {
+                  "searchTerm": "Heart Bypass Surgery",
+                  "ranking": 1,
+                  "filters": [
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363L00000X",
+                        "taxonomyDisplayName": "Nurse Practitioner"
+                      }
+                    },
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363LF0000X",
+                        "taxonomyDisplayName": "Family Nurse Practitioner"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "condition": [
+                {
+                  "searchTerm": "Heartburn",
+                  "ranking": 1,
+                  "filters": [
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363L00000X",
+                        "taxonomyDisplayName": "Nurse Practitioner"
+                      }
+                    },
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363LF0000X",
+                        "taxonomyDisplayName": "Family Nurse Practitioner"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "specialty": [
+                {
+                  "searchTerm": "Heart Doctor",
+                  "ranking": 1,
+                  "filters": [
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363L00000X",
+                        "taxonomyDisplayName": "Nurse Practitioner"
+                      }
+                    },
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363LF0000X",
+                        "taxonomyDisplayName": "Family Nurse Practitioner"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "searchTerm": "Heart Surgeon",
+                  "ranking": 2,
+                  "filters": [
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363L00000X",
+                        "taxonomyDisplayName": "Nurse Practitioner"
+                      }
+                    },
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "363LF0000X",
+                        "taxonomyDisplayName": "Family Nurse Practitioner"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "clinic": [
+                {
+                  "searchTerm": "VIM_CLINICS_LTD_35ZZFAQ+NC",
+                  "name": "Vim Example Clinic Ltd.",
+                  "ranking": 1,
+                  "addressLine1": "1000 Penny Lane",
+                  "city": "Springfield",
+                  "state": "AK",
+                  "filters": [
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "207RC0000X",
+                        "taxonomyDisplayName": "Cardiologist"
+                      }
+                    },
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "207R00000X",
+                        "taxonomyDisplayName": "Internist"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "searchTerm": "VIM_HEALERS_LTD_21ZVAQQ+IJ",
+                  "name": "Vim API Healers",
+                  "ranking": 1,
+                  "addressLine1": "2000 Quarter Rd.",
+                  "city": "Villagetown",
+                  "state": "WA",
+                  "filters": [
+                    {
+                      "type": "TAXONOMY",
+                      "value": {
+                        "taxonomyCode": "207Q00000X",
+                        "taxonomyDisplayName": "Family Physician"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "specialty": {
+                "$ref": "#/components/schemas/categorySuggestionsBase"
+              },
+              "condition": {
+                "$ref": "#/components/schemas/categorySuggestionsBase"
+              },
+              "procedure": {
+                "$ref": "#/components/schemas/categorySuggestionsBase"
+              },
+              "clinic": {
+                "$ref": "#/components/schemas/categorySuggestionsClinic"
+              },
+              "provider": {
+                "type": "array",
+                "description": "providers matching the searchTeam",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "npi": {
+                      "type": "string",
+                      "description": "provider's NPI",
+                      "example": "1396709168"
+                    },
+                    "ranking": {
+                      "type": "number"
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "middleName": {
+                      "type": "string",
+                      "example": "D"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "example": "Hart"
+                    },
+                    "suffix": {
+                      "type": "string",
+                      "example": "MD"
+                    },
+                    "profilePicture": {
+                      "description": "URL of the provider's profile picture.",
+                      "type": "string",
+                      "example": "http://johnhartasdf.com"
+                    },
+                    "taxonomies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/taxonomies"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "providerProfile": {
+        "type": "object",
+        "properties": {
+          "npi": {
+            "type": "string",
+            "example": "123456789"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "middleName": {
+            "type": "string",
+            "example": "D"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Hart"
+          },
+          "suffix": {
+            "type": "string",
+            "example": "MD"
+          },
+          "title": {
+            "type": "string"
+          },
+          "taxonomies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/taxonomies"
+            }
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "description": "Full address of the provider office",
+                  "type": "string"
+                },
+                "timezone": {
+                  "type": "string",
+                  "description": "timezone",
+                  "example": "America/New_York"
+                },
+                "bookingType": {
+                  "type": "string",
+                  "enum": ["NONE", "CONCIERGE", "REQUEST", "INSTANT", "HYBRID"],
+                  "example": "INSTANT"
+                },
+                "appointmentTypes": {
+                  "type": "array",
+                  "description": "list of appointment types that the providers offers at the chosen location",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "appointment type's ID",
+                        "example": "251"
+                      },
+                      "displayName": {
+                        "type": "string",
+                        "description": "appointment type's friendly display name",
+                        "example": "New Patient"
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "description": "Appointment duration in minutes",
+                        "example": "20"
+                      },
+                      "nextAvailableSlot": {
+                        "type": "string",
+                        "description": "provider's next available appointment (only relevant for booking).",
+                        "example": "2019-11-03T15:45:00.000Z"
+                      }
+                    }
+                  }
+                },
+                "geo": {
+                  "description": "Geocode of the provider office.",
+                  "type": "object",
+                  "properties": {
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "officeName": {
+                  "type": "string"
+                },
+                "phoneNumber": {
+                  "type": "object",
+                  "properties": {
+                    "countryDialingCode": {
+                      "type": "string",
+                      "example": "+1"
+                    },
+                    "number": {
+                      "type": "string",
+                      "example": "9999996999"
+                    }
+                  }
+                },
+                "fax": {
+                  "type": "object",
+                  "properties": {
+                    "number": {
+                      "type": "string",
+                      "example": "6512196458"
+                    },
+                    "countryDialingCode": {
+                      "type": "string",
+                      "description": "country dialing code",
+                      "example": "+1"
+                    }
+                  }
+                },
+                "bookingHorizon": {
+                  "type": "string",
+                  "enum": ["sameDay", "sameWeek", "sameMonth", "overAMonth", "notAccepting"]
+                },
+                "openHours": {
+                  "type": "object",
+                  "properties": {
+                    "Mon": {
+                      "type": "object",
+                      "description": "Monday office opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "Tue": {
+                      "type": "object",
+                      "description": "Tuesday opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "Wed": {
+                      "type": "object",
+                      "description": "Wednesday opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "Thu": {
+                      "type": "object",
+                      "description": "Thursday opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "Fri": {
+                      "type": "object",
+                      "description": "Friday opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "Sat": {
+                      "type": "object",
+                      "description": "Saturday opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "Sun": {
+                      "type": "object",
+                      "description": "Sunday opening hours",
+                      "properties": {
+                        "open": {
+                          "type": "string",
+                          "example": "09-00"
+                        },
+                        "close": {
+                          "type": "string",
+                          "example": "17-00"
+                        },
+                        "isOpen": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "profilePicture": {
+            "description": "URL of the provider's profile picture.",
+            "type": "string",
+            "example": "http://johnhartasdf.com"
+          },
+          "rating": {
+            "type": "number",
+            "example": 4.67
+          },
+          "ratingCount": {
+            "type": "number"
+          },
+          "acceptNewPatients": {
+            "type": "boolean"
+          },
+          "boardCertifications": {
+            "type": "boolean"
+          },
+          "medicalDegree": {
+            "type": "string",
+            "example": "Johns Hopkins University"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "iso639-1": {
+                  "type": "string",
+                  "example": "sv"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Swedish"
+                },
+                "nativeName": {
+                  "type": "string",
+                  "example": "svenska"
+                }
+              }
+            }
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["MALE", "FEMALE"]
+          }
+        }
+      },
+      "geo": {
+        "type": "object",
+        "description": "The relevant geographical area to search in. Can be zip code, state or latitude/longitude pair of coordinates. If multiple properties are provided, only the first one will be taken in account in the following order: geocode, address, zip",
+        "properties": {
+          "geocode": {
+            "type": "object",
+            "required": ["latitude", "longitude"],
+            "properties": {
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            }
+          },
+          "zip": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "example": "2000 Nw 87th Avenue, Doral, FL, 33122"
+          }
+        }
+      },
+      "category": {
+        "type": "string",
+        "enum": ["SPECIALTY", "CONDITION", "PROCEDURE", "PROVIDER", "CLINIC"]
+      },
+      "categorySuggestionBase": {
+        "type": "object",
+        "properties": {
+          "searchTerm": {
+            "description": "The matching search term to be used in the \"find\" endpoint.",
+            "type": "string"
+          },
+          "ranking": {
+            "type": "number"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["TAXONOMY"],
+                  "description": "the filter type we can pass as a filter param. For example, type taxonomy"
+                },
+                "value": {
+                  "type": "object",
+                  "description": "The value of the filter. For example, a specific taxonomy"
+                }
+              }
+            }
+          }
+        }
+      },
+      "categorySuggestionClinic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/categorySuggestionBase"
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "addressLine1": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "zip": {
+                "type": "string"
+              },
+              "distance": {
+                "description": "Distance from the clinic in miles.",
+                "type": "number"
+              }
+            }
+          }
+        ]
+      },
+      "categorySuggestionsBase": {
+        "type": "array",
+        "description": "suggestions for category",
+        "items": {
+          "$ref": "#/components/schemas/categorySuggestionBase"
+        }
+      },
+      "categorySuggestionsClinic": {
+        "type": "array",
+        "description": "suggestions for category",
+        "items": {
+          "$ref": "#/components/schemas/categorySuggestionClinic"
+        }
+      },
+      "taxonomies": {
+        "type": "object",
+        "properties": {
+          "taxonomyCode": {
+            "type": "string",
+            "description": "specialty code",
+            "example": "207Q00000X"
+          },
+          "taxonomyDisplayName": {
+            "type": "string",
+            "description": "specialty friendly display name",
+            "example": "Family Physician"
+          }
+        }
+      }
+    }
+  },
+  "x-amazon-apigateway-documentation": {
+    "version": "1.22",
+    "createdDate": "2019-04-03T16:05:55Z",
+    "documentationParts": [
+      {
+        "location": {
+          "type": "API"
+        },
+        "properties": {
+          "description": "Welcome to the Vim API reference. Below you can find documentation for all of the available endpoints, with examples.\n\nThe Vim API is organized around",
+          "version": "0.0.1",
+          "title": "Vim API"
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/appointment/book",
+          "method": "POST"
+        },
+        "properties": {
+          "description": "Books an appointment for a patient at the provider's office"
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/appointment/request",
+          "method": "POST"
+        },
+        "properties": {
+          "description": "Sends a booking request to the provider's office"
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/auth/getJwt",
+          "method": "GET"
+        },
+        "properties": {
+          "description": "Authenticates the API key and initializes the API session."
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/auth/refreshJwt",
+          "method": "POST"
+        },
+        "properties": {
+          "description": "Refreshes the API session."
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/provider/alternatives",
+          "method": "GET"
+        },
+        "properties": {
+          "description": "For a list of providers, returns the booking method, appointment types and next available slot."
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/provider/availability",
+          "method": "POST"
+        },
+        "properties": {
+          "description": "For a list of providers, returns the booking method and appointment types."
+        }
+      },
+      {
+        "location": {
+          "type": "METHOD",
+          "path": "/provider/{npi}/bookingData",
+          "method": "POST"
+        },
+        "properties": {
+          "description": "For a specific provider, returns extended provider information, appointment types and available time slots for a given date range. Also returns the scheduling configuration of the chosen provider and API key."
+        }
+      },
+      {
+        "location": {
+          "type": "MODEL",
+          "name": "BookRequest"
+        },
+        "properties": {
+          "description": "Books an appointment for a patient at the provider's office"
+        }
+      },
+      {
+        "location": {
+          "type": "QUERY_PARAMETER",
+          "path": "/provider/alternatives",
+          "method": "GET",
+          "name": "address"
+        },
+        "properties": {
+          "description": "provider address"
+        }
+      },
+      {
+        "location": {
+          "type": "QUERY_PARAMETER",
+          "path": "/provider/alternatives",
+          "method": "GET",
+          "name": "npi"
+        },
+        "properties": {
+          "description": "provider's NPI"
+        }
+      },
+      {
+        "location": {
+          "type": "REQUEST_HEADER",
+          "path": "/appointment/book",
+          "method": "POST",
+          "name": "Authorization"
+        },
+        "properties": {
+          "description": "API key provided by Vim for authentication."
+        }
+      },
+      {
+        "location": {
+          "type": "REQUEST_HEADER",
+          "path": "/appointment/book",
+          "method": "POST",
+          "name": "x-api-key"
+        },
+        "properties": {
+          "description": "Bearer authorization token obtained from /auth/getJwt endpoint."
+        }
+      },
+      {
+        "location": {
+          "type": "REQUEST_HEADER",
+          "path": "/auth/getJwt",
+          "method": "GET",
+          "name": "x-api-key"
+        },
+        "properties": {
+          "description": "API key provided by Vim for authentication."
+        }
+      },
+      {
+        "location": {
+          "type": "REQUEST_HEADER",
+          "path": "/auth/refreshJwt",
+          "method": "POST",
+          "name": "x-api-key"
+        },
+        "properties": {
+          "description": "API key provided by Vim for authentication."
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE"
+        },
+        "properties": {
+          "description": "Vim Api"
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/appointment/book"
+        },
+        "properties": {
+          "description": "Books an appointment for a patient at the provider's office"
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/appointment"
+        },
+        "properties": {
+          "description": "Appointment"
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/auth"
+        },
+        "properties": {
+          "description": "Athentication"
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/patient"
+        },
+        "properties": {
+          "description": "Patient"
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/provider"
+        },
+        "properties": {
+          "description": "Provider"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/book",
+          "method": "POST",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/book",
+          "method": "POST",
+          "statusCode": "400"
+        },
+        "properties": {
+          "description": "Bad request"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/book",
+          "method": "POST",
+          "statusCode": "401"
+        },
+        "properties": {
+          "description": "Unautorized"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/book",
+          "method": "POST",
+          "statusCode": "404"
+        },
+        "properties": {
+          "description": "Provider/Address not found"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/book",
+          "method": "POST",
+          "statusCode": "409"
+        },
+        "properties": {
+          "description": "Time slot conflict"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/book",
+          "method": "POST",
+          "statusCode": "500"
+        },
+        "properties": {
+          "description": "Server error"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/request",
+          "method": "POST",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/request",
+          "method": "POST",
+          "statusCode": "400"
+        },
+        "properties": {
+          "description": "Bad request"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/request",
+          "method": "POST",
+          "statusCode": "401"
+        },
+        "properties": {
+          "description": "Unauthorized"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/request",
+          "method": "POST",
+          "statusCode": "404"
+        },
+        "properties": {
+          "description": "Provider/Address not found"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/appointment/request",
+          "method": "POST",
+          "statusCode": "500"
+        },
+        "properties": {
+          "description": "Server error"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/auth/refreshJwt",
+          "method": "POST",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/patient/identify",
+          "method": "POST",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/patient/identify",
+          "method": "POST",
+          "statusCode": "401"
+        },
+        "properties": {
+          "description": "Unauthorized"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/patient/identify",
+          "method": "POST",
+          "statusCode": "500"
+        },
+        "properties": {
+          "description": "Server error"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/alternatives",
+          "method": "GET",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/alternatives",
+          "method": "GET",
+          "statusCode": "401"
+        },
+        "properties": {
+          "description": "Unauthrized"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/alternatives",
+          "method": "GET",
+          "statusCode": "404"
+        },
+        "properties": {
+          "description": "Provider/Address not found"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/alternatives",
+          "method": "GET",
+          "statusCode": "500"
+        },
+        "properties": {
+          "description": "Server error"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/availability",
+          "method": "POST",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/availability",
+          "method": "POST",
+          "statusCode": "401"
+        },
+        "properties": {
+          "description": "Unathorized"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/availability",
+          "method": "POST",
+          "statusCode": "404"
+        },
+        "properties": {
+          "description": "Provider/Address not found"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE",
+          "path": "/provider/availability",
+          "method": "POST",
+          "statusCode": "500"
+        },
+        "properties": {
+          "description": "Server error"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE_BODY",
+          "path": "/auth/getJwt",
+          "method": "GET",
+          "statusCode": "200"
+        },
+        "properties": {
+          "description": "Successful response"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE_HEADER",
+          "path": "/auth/getJwt",
+          "method": "GET",
+          "statusCode": "200",
+          "name": "Access-Control-Allow-Origin"
+        },
+        "properties": {
+          "description": "CORS header"
+        }
+      },
+      {
+        "location": {
+          "type": "RESPONSE_HEADER",
+          "path": "/auth/refreshJwt",
+          "method": "POST",
+          "statusCode": "200",
+          "name": "Access-Control-Allow-Origin"
+        },
+        "properties": {
+          "description": "CORS header"
+        }
+      }
+    ]
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "BAD_REQUEST_BODY": {
+      "statusCode": 400,
+      "responseParameters": {
+        "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+      },
+      "responseTemplates": {
+        "application/json": "{\"responseMessage\": \"$context.error.message - $context.error.validationErrorString\" }"
+      }
+    }
+  },
+  "x-amazon-apigateway-request-validators": {
+    "Validate body": {
+      "validateRequestParameters": false,
+      "validateRequestBody": true
+    },
+    "Validate body, query string parameters, and headers": {
+      "validateRequestParameters": true,
+      "validateRequestBody": true
+    }
+  }
+}
